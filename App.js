@@ -48,12 +48,17 @@ const SecondItemScreen = () => {
       <Text style={textStyle}>From Values: {t4.getTime()}</Text>
       <Text style={textStyle}>From Date: {t5.getTime()}</Text>
       <Text style={textStyle}>
-        {t1.getTime()} + {t2.getTime()} = {t1.add(t2).getTime()}
+        Add method: {t1.getTime()} + {t2.getTime()} = {t1.add(t2).getTime()}
       </Text>
       <Text style={textStyle}>
-        {t3.getTime()} - {t4.getTime()} = {t3.sub(t4).getTime()}
+        Sub method: {t3.getTime()} - {t4.getTime()} = {t3.sub(t4).getTime()}
       </Text>
-      <Text style={textStyle}>{t5.getTime()}</Text>
+      <Text style={textStyle}>
+        Add class method: {t1.getTime()} + {t2.getTime()} = {TimeIS.add(t1, t2).getTime()}
+      </Text>
+      <Text style={textStyle}>
+        Sub class method: {t3.getTime()} - {t4.getTime()} = {TimeIS.sub(t3, t4).getTime()}
+      </Text>
     </View>
   );
 };
