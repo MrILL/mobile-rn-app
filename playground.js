@@ -17,9 +17,10 @@ let studentsGroups = [];
 studentsStr
   .split('; ')
   .map(v => v.split('- ')
-  .reverse()
-  .map(str => str.trim()))
-  .forEach(([group, students])=>{
+    .reverse()
+    .map(str => str.trim())
+  )
+  .forEach(([group, students]) => {
     studentsGroups[group] = studentsGroups[group] ? [...studentsGroups[group], students] : [students];
   });
 
@@ -43,29 +44,29 @@ const points = [12, 12, 12, 12, 12, 12, 12, 16];
 //   - значення – масив з оцінками студента (заповніть масив випадковими значеннями, використовуючи функцію `randomValue(maxValue: Int) -> Int`)
 
 function randomValue(maxValue) {
-    const randNum = Math.floor(Math.random() * 7);
-    switch (randNum) {
+  const randNum = Math.floor(Math.random() * 7);
+  switch (randNum) {
     case 1:
-        return Math.floor(maxValue * 0.7);
+      return Math.floor(maxValue * 0.7);
     case 2:
-        return Math.floor(maxValue * 0.9);
+      return Math.floor(maxValue * 0.9);
     case 3:
     case 4:
     case 5:
-        return maxValue;
+      return maxValue;
     default:
-        return 0;
-    }
+      return 0;
+  }
 }
 
 let studentPoints = [];
 
 // Ваш код починається тут
 
-Object.entries(studentsGroups).forEach(([group, students])=>{
+Object.entries(studentsGroups).forEach(([group, students]) => {
   studentPoints[group] = [];
-  students.forEach(student=>{
-    studentPoints[group][student] = points.map(num=>randomValue(num));
+  students.forEach(student => {
+    studentPoints[group][student] = points.map(num => randomValue(num));
   });
 });
 
@@ -89,9 +90,9 @@ let sumPoints = [];
 // Ваш код починається тут
 
 sumPoints = studentPoints;
-Object.entries(sumPoints).forEach(([group, students])=>{
-  Object.entries(students).forEach(([student, marks])=>{
-    sumPoints[group][student] = marks.reduce((sum, v)=>sum + v);
+Object.entries(sumPoints).forEach(([group, students]) => {
+  Object.entries(students).forEach(([student, marks]) => {
+    sumPoints[group][student] = marks.reduce((sum, v) => sum + v);
   });
 });
 
@@ -112,9 +113,9 @@ let groupAvg = [];
 
 // Ваш код починається тут
 
-Object.entries(sumPoints).forEach(([group, students])=>{
+Object.entries(sumPoints).forEach(([group, students]) => {
   const studentsArr = Object.entries(students);
-  const studentsSum = studentsArr.map((student)=>student[1]).reduce((sum, v)=>sum + v);
+  const studentsSum = studentsArr.map((student) => student[1]).reduce((sum, v) => sum + v, 0);
   groupAvg[group] = studentsSum / studentsArr.length;
 });
 
@@ -135,8 +136,8 @@ var passedPerGroup = [];
 
 // Ваш код починається тут
 
-Object.entries(sumPoints).forEach(([group, students])=>{
-  passedPerGroup[group] = Object.entries(students).filter((student)=>student[1] > 60);
+Object.entries(sumPoints).forEach(([group, students]) => {
+  passedPerGroup[group] = Object.entries(students).filter((student) => student[1] > 60);
 });
 
 // Ваш код закінчується тут
