@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -12,6 +13,8 @@ import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import TimeIS from './TimeIS.js';
 
 const styleAlignCenter = {
   flex: 1,
@@ -32,11 +35,30 @@ const InfoScreen = () => {
   );
 };
 
-const SecondItem = () => {
-  const textStyle = {textALign: 'center'};
+const SecondItemScreen = () => {
+  const textStyle = {textAlign: 'center'};
+  const t1 = TimeIS.fromValues(23, 59, 59);
+  const t2 = TimeIS.fromValues(12, 0, 1);
+  const t3 = TimeIS.fromZero();
+  const t4 = TimeIS.fromValues(0, 0, 1);
+  const t5 = TimeIS.fromDate(new Date());
   return (
     <View style={styleAlignCenter}>
-      <Text style={textStyle}>nothing...</Text>
+      <Text style={textStyle}>From Zero: {t3.getTime()}</Text>
+      <Text style={textStyle}>From Values: {t4.getTime()}</Text>
+      <Text style={textStyle}>From Date: {t5.getTime()}</Text>
+      <Text style={textStyle}>
+        Add method: {t1.getTime()} + {t2.getTime()} = {t1.add(t2).getTime()}
+      </Text>
+      <Text style={textStyle}>
+        Sub method: {t3.getTime()} - {t4.getTime()} = {t3.sub(t4).getTime()}
+      </Text>
+      <Text style={textStyle}>
+        Add class method: {t1.getTime()} + {t2.getTime()} = {TimeIS.add(t1, t2).getTime()}
+      </Text>
+      <Text style={textStyle}>
+        Sub class method: {t3.getTime()} - {t4.getTime()} = {TimeIS.sub(t3, t4).getTime()}
+      </Text>
     </View>
   );
 };
@@ -54,7 +76,7 @@ const App = () => {
             ),
           }}
         />
-        <Tab.Screen name="Item 2" component={SecondItem} />
+        <Tab.Screen name="Item 2" component={SecondItemScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
