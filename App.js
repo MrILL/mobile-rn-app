@@ -14,7 +14,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import InfoScreen from './src/scenes/InfoScreen';
 import DrawingScreen from './src/scenes/DrawingScreen';
-import MovieScreen from './src/scenes/MovieScreen';
+import MoviesScreen from './src/scenes/MoviesScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -43,7 +43,7 @@ const App = () => {
           />
           <Tab.Screen
             name="Movies List"
-            component={MovieScreen}
+            component={MoviesScreen}
             options={{
               tabBarIcon: ({color, size}) => (
                 <MaterialCommunityIcons
