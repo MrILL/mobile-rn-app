@@ -1,6 +1,6 @@
 import React from 'react';
 import {Image, StyleSheet, View, Text} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableHighlight} from 'react-native-gesture-handler';
 
 const posters = {
   'Poster_01.jpg': require('../../assets/Movies/Posters/Poster_01.jpg'),
@@ -13,28 +13,29 @@ const posters = {
   'Poster_10.jpg': require('../../assets/Movies/Posters/Poster_10.jpg'),
 };
 
-const Movie = ({navigation, params}) => {
-  const {info, Poster, Title, Year, Type} = params;
+const Movie = React.forwardRef(({navigation, params}, ref) => {
+  const {imdbID, Poster, Title, Year, Type} = params;
   return (
-    <TouchableOpacity
-      style={styles.movie}
+    <TouchableHighlight
+      ref={ref}
       onPress={() =>
         navigation.push('Info', {
           annotation: {Poster, Title, Year, Type},
-          info: info,
+          imdbID,
           posterImg: posters[Poster],
         })
-      }
-    >
-      <Image style={styles.poster} source={posters[Poster]} />
-      <View style={styles.info}>
-        <Text style={styles.infoText}>{Title}</Text>
-        {Year ? <Text style={styles.infoText}>{Year}</Text> : null}
-        {Type ? <Text style={styles.infoText}>{Type}</Text> : null}
+      }>
+      <View style={styles.movie}>
+        <Image style={styles.poster} source={posters[Poster]} />
+        <View style={styles.info}>
+          <Text style={styles.infoText}>{Title}</Text>
+          {Year ? <Text style={styles.infoText}>{Year}</Text> : null}
+          {Type ? <Text style={styles.infoText}>{Type}</Text> : null}
+        </View>
       </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
-};
+});
 
 const styles = StyleSheet.create({
   movie: {
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     borderBottomWidth: 1,
     borderBottomColor: '#d8d8d8',
+    backgroundColor: 'white',
   },
   poster: {
     width: 80,

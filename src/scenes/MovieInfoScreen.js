@@ -1,20 +1,33 @@
 import React from 'react';
 import {Image, ScrollView, StyleSheet, Text} from 'react-native';
 
+const moviesInfo = {
+  tt0076759: require('../../assets/Movies/tt0076759.json'),
+  tt0080684: require('../../assets/Movies/tt0080684.json'),
+  tt0086190: require('../../assets/Movies/tt0086190.json'),
+  tt0120915: require('../../assets/Movies/tt0120915.json'),
+  tt0121765: require('../../assets/Movies/tt0121765.json'),
+  tt0121766: require('../../assets/Movies/tt0121766.json'),
+  tt0796366: require('../../assets/Movies/tt0796366.json'),
+  tt2488496: require('../../assets/Movies/tt2488496.json'),
+  tt2527336: require('../../assets/Movies/tt2527336.json'),
+  tt3748528: require('../../assets/Movies/tt3748528.json'),
+};
+
 const MovieInfoScreen = ({route}) => {
-  //TODO clear this shit
-  //TODO also push here another basic parameters so if file not found - it'll use these parameters and output something
-  const {annotation, info, posterImg} = route.params;
+  const {annotation, imdbID, posterImg} = route.params;
+  const info = moviesInfo[imdbID];
 
   const getValue = info ? (key) => info[key] : (key) => annotation[key];
-  const line = (key, value) =>
-    key && value && (
+  const renderLine = (key, value) =>
+    key &&
+    value && (
       <Text key={key} style={styles.text}>
         <Text style={styles.key}>{key + ': '}</Text>
         {value}
       </Text>
     );
-  const separate = (key) => <Text key={key} />;
+  const renderSeparating = (key) => <Text key={key} />;
 
   // const res = [];
   // const linesOrder = [
@@ -25,33 +38,33 @@ const MovieInfoScreen = ({route}) => {
   //   ['Plot'],
   // ];
   // linesOrder.forEach((arr, i) => {
-  //   const block = arr.map((key) => line(key, getValue(key)));
+  //   const block = arr.map((key) => renderLine(key, getValue(key)));
   //   res.push(...block, separate(i));
   // });
 
   const a = info
     ? [
-        line('Title', info.Title),
-        line('Year', info.Year),
-        line('Genre', info.Genre),
-        separate(0),
-        line('Director', info.Director),
-        line('Actors', info.Actors),
-        separate(1),
-        line('Country', info.Country),
-        line('Language', info.Language),
-        line('Production', info.Production),
-        line('Released', info.Released),
-        line('Runtime', info.Runtime),
-        separate(2),
-        line('Awards', info.Awards),
-        line('Rating', info.Rating),
-        separate(3),
-        line('Plot', info.Plot),
+        renderLine('Title', info.Title),
+        renderLine('Year', info.Year),
+        renderLine('Genre', info.Genre),
+        renderSeparating(0),
+        renderLine('Director', info.Director),
+        renderLine('Actors', info.Actors),
+        renderSeparating(1),
+        renderLine('Country', info.Country),
+        renderLine('Language', info.Language),
+        renderLine('Production', info.Production),
+        renderLine('Released', info.Released),
+        renderLine('Runtime', info.Runtime),
+        renderSeparating(2),
+        renderLine('Awards', info.Awards),
+        renderLine('Rating', info.Rating),
+        renderSeparating(3),
+        renderLine('Plot', info.Plot),
       ]
     : [
-        line('Title', annotation.Title),
-        line('Year', annotation.Year),
+        renderLine('Title', annotation.Title),
+        renderLine('Year', annotation.Year),
       ];
 
   return (

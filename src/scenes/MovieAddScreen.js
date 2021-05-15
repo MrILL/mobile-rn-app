@@ -4,47 +4,49 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  ScrollView,
 } from 'react-native';
 
-const MovieAddScreen = ({navigation}) => {
+const MovieAddScreen = ({addMovie, navigation}) => {
   const [input, setText] = React.useState({
-    title: '',
-    type: '',
-    year: '',
+    Title: '',
+    Type: '',
+    Year: '',
   });
 
   const handlePress = () => {
-    alert('added! suckama!' + input.title + input.type + input.year);
+    addMovie({...input, imdbID: input.Title});
+    navigation.navigate('List');
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.text}>Title</Text>
       <TextInput
         style={styles.textInput}
-        value={input.title}
-        onChangeText={(title) => setText({...input, title})}
+        value={input.Title}
+        onChangeText={(Title) => setText({...input, Title})}
       />
 
       <Text style={styles.text}>Type</Text>
       <TextInput
         style={styles.textInput}
-        value={input.type}
-        onChangeText={(type) => setText({...input, type})}
+        value={input.Type}
+        onChangeText={(Type) => setText({...input, Type})}
       />
 
       <Text style={styles.text}>Year</Text>
       <TextInput
         style={styles.textInput}
-        value={input.year}
-        onChangeText={(year) => setText({...input, year})}
+        keyboardType="numeric"
+        value={input.Year}
+        onChangeText={(Year) => setText({...input, Year})}
       />
 
       <TouchableOpacity style={styles.button} onPress={handlePress}>
         <Text style={styles.text}>Add</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
