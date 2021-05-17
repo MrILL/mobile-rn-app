@@ -1,10 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
+import {Text} from 'react-native';
 import {ScrollView, View, Dimensions, SafeAreaView} from 'react-native';
 import {StyleSheet, Image} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
+
+const getUnitWidth = (screenWidth) => {
+  return screenWidth / 5;
+};
 
 const positionRule = (index, screenWidth) => {
-  const unitW = screenWidth / 5;
+  if (index === undefined || screenWidth === undefined) {
+    console.log('eat shit dipshit');
+    return;
+  }
+  const unitW = getUnitWidth(screenWidth);
   const gap = 3;
 
   const positions = [
@@ -51,30 +61,61 @@ const positionRule = (index, screenWidth) => {
     width: style.width ? style.width - gap * 2 : 0,
     height: style.height ? style.height - gap * 2 : 0,
     left: style.left + gap,
-    top: style.top + gap + unitW * 4 * Math.floor(index / positions.length),
   };
-
   return result;
+};
+
+const getBlockHeight = (groupSize, screenWidth) => {
+  const unitW = getUnitWidth(screenWidth);
+  if (groupSize === 0) {
+    return 0;
+  } else if (groupSize > 2) {
+    return unitW * 4;
+  } else {
+    return unitW * 3;
+  }
 };
 
 const ImageLayout = ({data}) => {
   const screenWidth = Dimensions.get('window').width;
+  const blockElements = 6;
+  const groupSize =
+    Math.floor(data.length / blockElements) +
+    (data.length % blockElements > 0 ? 1 : 0);
+
+  const groups = Array(groupSize);
+  for (let i = 0; i < groupSize - 1; i++) {
+    groups[i] = data.slice(
+      i * blockElements,
+      i * blockElements + blockElements,
+    );
+  }
+  groups[groupSize - 1] = data.slice((groupSize - 1) * blockElements);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
-        <View style={{flex: 1}}>
-          {data &&
-            data.map((uri, i) => (
-              <Image
-                key={uri}
-                style={[styles.img, positionRule(i, screenWidth)]}
-                source={{uri}}
-              />
-            ))}
+    <FlatList
+      data={groups}
+      renderItem={({item, index}) => (
+        <View
+          key={`${index}`}
+          style={{
+            width: screenWidth,
+            height: getBlockHeight(item.length, screenWidth),
+          }}>
+          {item.map((uri, i) => (
+            <Image
+              key={uri}
+              style={[
+                styles.img,
+                positionRule(index * blockElements + i, screenWidth),
+              ]}
+              source={{uri}}
+            />
+          ))}
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      )}
+      keyExtractor={(_, i) => `${i}`}
+    />
   );
 };
 
@@ -83,6 +124,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   img: {
+    width: 100,
     position: 'absolute',
     resizeMode: 'contain',
     backgroundColor: 'grey',
