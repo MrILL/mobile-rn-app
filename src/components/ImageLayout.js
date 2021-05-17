@@ -1,8 +1,11 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Text} from 'react-native';
-import {ScrollView, View, Dimensions, SafeAreaView} from 'react-native';
-import {StyleSheet, Image} from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Image,
+  View,
+  Dimensions,
+} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 
 const getUnitWidth = (screenWidth) => {
@@ -11,7 +14,6 @@ const getUnitWidth = (screenWidth) => {
 
 const positionRule = (index, screenWidth) => {
   if (index === undefined || screenWidth === undefined) {
-    console.log('eat shit dipshit');
     return;
   }
   const unitW = getUnitWidth(screenWidth);
@@ -92,36 +94,45 @@ const ImageLayout = ({data}) => {
   }
   groups[groupSize - 1] = data.slice((groupSize - 1) * blockElements);
 
-  return (
-    <FlatList
-      data={groups}
-      renderItem={({item, index}) => (
-        <View
-          key={`${index}`}
-          style={{
-            width: screenWidth,
-            height: getBlockHeight(item.length, screenWidth),
-          }}>
-          {item.map((uri, i) => (
-            <Image
-              key={uri}
-              style={[
-                styles.img,
-                positionRule(index * blockElements + i, screenWidth),
-              ]}
-              source={{uri}}
-            />
-          ))}
-        </View>
-      )}
-      keyExtractor={(_, i) => `${i}`}
-    />
-  );
+  if (groups.length) {
+    return (
+      <FlatList
+        data={groups}
+        renderItem={({item, index}) => (
+          <View
+            key={`${index}`}
+            style={{
+              width: screenWidth,
+              height: getBlockHeight(item.length, screenWidth),
+            }}>
+            {item.map((uri, i) => (
+              <Image
+                key={uri}
+                style={[
+                  styles.img,
+                  positionRule(index * blockElements + i, screenWidth),
+                ]}
+                source={{uri}}
+              />
+            ))}
+          </View>
+        )}
+        keyExtractor={(_, i) => `${i}`}
+      />
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#2589dc" />
+      </View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
   },
   img: {
     width: 100,

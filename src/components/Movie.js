@@ -2,17 +2,6 @@ import React from 'react';
 import {Image, StyleSheet, View, Text} from 'react-native';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 
-const posters = {
-  'Poster_01.jpg': require('../../assets/Movies/Posters/Poster_01.jpg'),
-  'Poster_02.jpg': require('../../assets/Movies/Posters/Poster_02.jpg'),
-  'Poster_03.jpg': require('../../assets/Movies/Posters/Poster_03.jpg'),
-  'Poster_05.jpg': require('../../assets/Movies/Posters/Poster_05.jpg'),
-  'Poster_06.jpg': require('../../assets/Movies/Posters/Poster_06.jpg'),
-  'Poster_07.jpg': require('../../assets/Movies/Posters/Poster_07.jpg'),
-  'Poster_08.jpg': require('../../assets/Movies/Posters/Poster_08.jpg'),
-  'Poster_10.jpg': require('../../assets/Movies/Posters/Poster_10.jpg'),
-};
-
 const Movie = React.forwardRef(({navigation, params}, ref) => {
   const {imdbID, Poster, Title, Year, Type} = params;
   return (
@@ -22,11 +11,11 @@ const Movie = React.forwardRef(({navigation, params}, ref) => {
         navigation.push('Info', {
           annotation: {Poster, Title, Year, Type},
           imdbID,
-          posterImg: posters[Poster],
+          posterImg: Poster,
         })
       }>
       <View style={styles.movie}>
-        <Image style={styles.poster} source={posters[Poster]} />
+        <Image style={styles.poster} source={{uri: Poster}} />
         <View style={styles.info}>
           <Text style={styles.infoText}>{Title}</Text>
           {Year ? <Text style={styles.infoText}>{Year}</Text> : null}

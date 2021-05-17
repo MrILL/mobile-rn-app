@@ -8,14 +8,13 @@ import MovieAddScreen from './MovieAddScreen';
 const Stack = createStackNavigator();
 
 const MoviesScreen = () => {
-  const [movieList, setMovieList] = useState(
-    require('../../assets/Movies/MoviesList').Search,
-  );
+  const [movieList, setMovieList] = useState([]);
 
-  const handleAddMovie = (movie) => setMovieList([...movieList, movie]);
+  const handleAddMovie = (movies) => setMovieList([...movieList, movies]);
   const handleDeleteMovie = (movieImdb) => {
     setMovieList(movieList.filter((m) => m.imdbID !== movieImdb));
   };
+  const handleSetMovies = (movies) => (movies ? setMovieList([...movies]) : []);
 
   return (
     <Stack.Navigator initialRouteName="List">
@@ -39,6 +38,7 @@ const MoviesScreen = () => {
             {...props}
             data={movieList}
             deleteMovie={handleDeleteMovie}
+            setMovies={handleSetMovies}
           />
         )}
       </Stack.Screen>

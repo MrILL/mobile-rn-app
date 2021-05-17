@@ -1,24 +1,27 @@
-import React from 'react';
-import {Image, ScrollView, StyleSheet, Text} from 'react-native';
-
-const moviesInfo = {
-  tt0076759: require('../../assets/Movies/tt0076759.json'),
-  tt0080684: require('../../assets/Movies/tt0080684.json'),
-  tt0086190: require('../../assets/Movies/tt0086190.json'),
-  tt0120915: require('../../assets/Movies/tt0120915.json'),
-  tt0121765: require('../../assets/Movies/tt0121765.json'),
-  tt0121766: require('../../assets/Movies/tt0121766.json'),
-  tt0796366: require('../../assets/Movies/tt0796366.json'),
-  tt2488496: require('../../assets/Movies/tt2488496.json'),
-  tt2527336: require('../../assets/Movies/tt2527336.json'),
-  tt3748528: require('../../assets/Movies/tt3748528.json'),
-};
+import React, {useState, useEffect} from 'react';
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+} from 'react-native';
 
 const MovieInfoScreen = ({route}) => {
-  const {annotation, imdbID, posterImg} = route.params;
-  const info = moviesInfo[imdbID];
+  const {annotation, imdbID} = route.params;
+  // const info = moviesInfo[imdbID];
+  const [info, setInfo] = useState();
 
-  const getValue = info ? (key) => info[key] : (key) => annotation[key];
+  useEffect(() => {
+    const API_KEY = '7e9fe69e';
+    const requestUrl = `http://www.omdbapi.com/?apikey=${API_KEY}&i=${imdbID}`;
+    fetch(requestUrl)
+      .then((response) => response.json())
+      .then((movie) => setInfo(movie))
+      .catch((err) => console.error(err));
+  }, []);
+  // const getValue = info ? (key) => info[key] : (key) => annotation[key];
   const renderLine = (key, value) =>
     key &&
     value && (
@@ -41,37 +44,45 @@ const MovieInfoScreen = ({route}) => {
   //   const block = arr.map((key) => renderLine(key, getValue(key)));
   //   res.push(...block, separate(i));
   // });
+  // console.log(info);
+  // console.log(info.Poster);
 
-  const a = info
-    ? [
-        renderLine('Title', info.Title),
-        renderLine('Year', info.Year),
-        renderLine('Genre', info.Genre),
-        renderSeparating(0),
-        renderLine('Director', info.Director),
-        renderLine('Actors', info.Actors),
-        renderSeparating(1),
-        renderLine('Country', info.Country),
-        renderLine('Language', info.Language),
-        renderLine('Production', info.Production),
-        renderLine('Released', info.Released),
-        renderLine('Runtime', info.Runtime),
-        renderSeparating(2),
-        renderLine('Awards', info.Awards),
-        renderLine('Rating', info.Rating),
-        renderSeparating(3),
-        renderLine('Plot', info.Plot),
-      ]
-    : [
-        renderLine('Title', annotation.Title),
-        renderLine('Year', annotation.Year),
-      ];
+  console.log(info && info.Poster);
 
-  return (
+  return info ? (
     <ScrollView>
-      <Image style={styles.poster} source={posterImg} />
-      {a}
+      {info && info.Poster && (
+        <Image style={styles.poster} source={{uri: info.Poster}} />
+      )}
+      {info
+        ? [
+            renderLine('Title', info.Title),
+            renderLine('Year', info.Year),
+            renderLine('Genre', info.Genre),
+            renderSeparating(0),
+            renderLine('Director', info.Director),
+            renderLine('Actors', info.Actors),
+            renderSeparating(1),
+            renderLine('Country', info.Country),
+            renderLine('Language', info.Language),
+            renderLine('Production', info.Production),
+            renderLine('Released', info.Released),
+            renderLine('Runtime', info.Runtime),
+            renderSeparating(2),
+            renderLine('Awards', info.Awards),
+            renderLine('Rating', info.Rating),
+            renderSeparating(3),
+            renderLine('Plot', info.Plot),
+          ]
+        : [
+            renderLine('Title', annotation.Title),
+            renderLine('Year', annotation.Year),
+          ]}
     </ScrollView>
+  ) : (
+    <View style={styles.activityContainer}>
+      <ActivityIndicator size="large" color="#2589dc" />
+    </View>
   );
 };
 
@@ -83,7 +94,13 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   poster: {
+    width: 300,
+    height: 500,
     alignSelf: 'center',
+  },
+  activityContainer: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });
 
