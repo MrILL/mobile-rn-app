@@ -15,6 +15,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import InfoScreen from './src/scenes/InfoScreen';
 import DrawingScreen from './src/scenes/DrawingScreen';
 import MoviesScreen from './src/scenes/MoviesScreen';
+import ImageCamera from './src/scenes/ImageCamera';
 
 const Tab = createBottomTabNavigator();
 
@@ -48,6 +49,19 @@ const App = () => {
               tabBarIcon: ({color, size}) => (
                 <MaterialCommunityIcons
                   name="filmstrip"
+                  color={color}
+                  size={size}
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Image Camera"
+            component={ImageCamera}
+            options={{
+              tabBarIcon: ({color, size}) => (
+                <MaterialCommunityIcons
+                  name="image"
                   color={color}
                   size={size}
                 />
