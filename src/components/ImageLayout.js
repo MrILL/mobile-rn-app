@@ -1,12 +1,7 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Image,
-  View,
-  Dimensions,
-} from 'react-native';
+import {ActivityIndicator, StyleSheet, View, Dimensions} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
+import FastImage from 'react-native-fast-image';
 
 const getUnitWidth = (screenWidth) => {
   return screenWidth / 5;
@@ -106,13 +101,14 @@ const ImageLayout = ({data}) => {
               height: getBlockHeight(item.length, screenWidth),
             }}>
             {item.map((uri, i) => (
-              <Image
+              <FastImage
                 key={uri}
                 style={[
                   styles.img,
                   positionRule(index * blockElements + i, screenWidth),
                 ]}
                 source={{uri}}
+                resizeMode={FastImage.resizeMode.contain}
               />
             ))}
           </View>

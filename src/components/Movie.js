@@ -1,6 +1,13 @@
 import React from 'react';
-import {Image, StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import {TouchableHighlight} from 'react-native-gesture-handler';
+import FastImage from 'react-native-fast-image';
+
+const normalisedSource = (uri) => {
+  const normalisedSrc =
+    typeof uri === 'string' && !uri.split('http')[1] ? null : uri;
+  return normalisedSrc;
+};
 
 const Movie = React.forwardRef(({navigation, params}, ref) => {
   const {imdbID, Poster, Title, Year, Type} = params;
@@ -15,7 +22,11 @@ const Movie = React.forwardRef(({navigation, params}, ref) => {
         })
       }>
       <View style={styles.movie}>
-        <Image style={styles.poster} source={{uri: Poster}} />
+        <FastImage
+          style={styles.poster}
+          source={{uri: normalisedSource(Poster)}}
+          resizeMode={FastImage.resizeMode.contain}
+        />
         <View style={styles.info}>
           <Text style={styles.infoText}>{Title}</Text>
           {Year ? <Text style={styles.infoText}>{Year}</Text> : null}

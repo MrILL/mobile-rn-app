@@ -3,6 +3,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Header} from 'react-native-elements';
 import * as ImagePicker from 'react-native-image-picker';
 import ImageLayout from '../components/ImageLayout';
+import getData from '../utils/persistData';
 
 const ImageCamera = () => {
   const [imagesUri, setImagesUri] = useState([]);
@@ -12,12 +13,13 @@ const ImageCamera = () => {
     const REQUEST = 'small+animals';
     const COUNT = 18;
     const requestUrl = `https://pixabay.com/api/?key=${API_KEY}&q=${REQUEST}&image_type=photo&per_page=${COUNT}`;
-    fetch(requestUrl)
-      .then((response) => response.json())
-      .then(({hits}) => {
+    getData(requestUrl).then((responseData) => {
+      const {hits} = responseData;
+      if (hits) {
         setImagesUri(hits.map(({previewURL}) => previewURL));
-      });
-  });
+      }
+    });
+  }, []);
 
   const addImageBtn = (
     <AntDesign

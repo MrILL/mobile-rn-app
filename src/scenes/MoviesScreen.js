@@ -14,7 +14,9 @@ const MoviesScreen = () => {
   const handleDeleteMovie = (movieImdb) => {
     setMovieList(movieList.filter((m) => m.imdbID !== movieImdb));
   };
-  const handleSetMovies = (movies) => (movies ? setMovieList([...movies]) : []);
+  const handleSetMovies = (movies) => {
+    movies ? setMovieList(movies) : [];
+  };
 
   return (
     <Stack.Navigator initialRouteName="List">

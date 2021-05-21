@@ -4,6 +4,7 @@ import Movie from '../components/Movie';
 import {SearchBar} from 'react-native-elements';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import getData from '../utils/persistData';
 
 const MovieScreen = ({data, deleteMovie, setMovies, navigation}) => {
   const [searchText, setSearchText] = useState('');
@@ -12,20 +13,17 @@ const MovieScreen = ({data, deleteMovie, setMovies, navigation}) => {
     const API_KEY = '7e9fe69e';
     const requestUrl = `http://www.omdbapi.com/?apikey=${API_KEY}&s=${userText}&page=1`;
     if (userText) {
-      fetch(requestUrl)
-        .then((response) => response.json())
-        .then(({Search}) => setMovies(Search))
+      getData(requestUrl)
+        .then(({Search}) => {
+          const newMovies = Search ? Search : [];
+          setMovies(newMovies);
+        })
         .catch((err) => console.error(err));
+    } else {
+      setMovies([]);
     }
     setSearchText(userText);
   };
-
-  const text = searchText.trim().toLowerCase();
-  const searchList = data.length
-    ? data.filter((item) => {
-        return item.Title.toLowerCase().indexOf(text) >= 0;
-      })
-    : null;
 
   const renderItem = ({item}) => {
     const {imdbID, Poster, Title, Year, Type} = item;
@@ -57,10 +55,10 @@ const MovieScreen = ({data, deleteMovie, setMovies, navigation}) => {
         value={searchText}
         lightTheme={true}
       />
-      {searchList ? (
+      {data && data.length > 0 ? (
         <SwipeListView
           recalculateHiddenLayout={true}
-          data={searchList}
+          data={data}
           renderItem={renderItem}
           renderHiddenItem={renderHiddenItem}
           rightOpenValue={-styles.deleteBtn.width}
